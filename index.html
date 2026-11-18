@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#003D71">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Estrelas da Ronda — registro rápido de Destaque e Atenção na Usinagem KSB.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://script.google.com https://script.googleusercontent.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; worker-src 'self'">
+<title>Estrelas da Ronda · KSB</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icones/favicon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="icones/icone-192.png">
+<link rel="apple-touch-icon" href="icones/apple-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Estrelas">
+<link rel="stylesheet" href="vendor/bootstrap-icons/bootstrap-icons.min.css">
+<style>
+/* ESTRELAS DA RONDA (celular) — KSB Brasil · Processo Usinagem · versão 1.1
+   Nada sensível neste arquivo: o endereço da planilha e a chave ficam só no aparelho, cifrados com o PIN (AES-GCM). */
+@font-face{font-family:Poppins;font-weight:400;font-display:swap;src:url(vendor/poppins/poppins-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:Poppins;font-weight:500;font-display:swap;src:url(vendor/poppins/poppins-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:Poppins;font-weight:600;font-display:swap;src:url(vendor/poppins/poppins-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:Poppins;font-weight:700;font-display:swap;src:url(vendor/poppins/poppins-latin-700-normal.woff2) format('woff2')}
+:root{
+  --azul:#0066B3;--azul-esc:#003D71;--azul-cl:#E8F2FA;
+  --bg:#F2F5F9;--card:#FFFFFF;--txt:#1B2631;--txt2:#566573;--mut:#8A97A6;--borda:#E3E8EE;
+  --verde:#1E9E55;--verde-bg:#DDF5E7;--amar:#F1C40F;--amar-esc:#9A7B00;--amar-bg:#FFF6D1;--verm:#C0392B;--verm-bg:#FADBD8;
+  --sombra:0 2px 10px rgba(0,40,80,.08);--raio:16px;
+  --topo:env(safe-area-inset-top,0px);--baixo:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0E1621;--card:#16212F;--txt:#E8EEF5;--txt2:#AAB7C6;--mut:#7C8A9B;--borda:#243244;--azul-cl:#13304D;
+  --verde-bg:rgba(39,174,96,.18);--amar-bg:rgba(241,196,15,.16);--verm-bg:rgba(231,76,60,.2);--amar-esc:#F1C40F;--sombra:0 2px 10px rgba(0,0,0,.35);
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:Poppins,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--txt);font-size:15px;overscroll-behavior-y:contain}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,select,textarea{font:inherit;color:var(--txt);background:var(--card);border:1.5px solid var(--borda);border-radius:12px;padding:12px 14px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--azul)}
+.oculto{display:none!important}
+/* topo */
+.topo{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,#0077C8,#003D71);color:#fff;padding:calc(10px + var(--topo)) 14px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 12px rgba(0,30,60,.25)}
+.topo .logo{height:20px;filter:brightness(0) invert(1)}
+.topo .tit{flex:1;min-width:0;line-height:1.15}
+.topo .tit b{display:block;font-size:15px;font-weight:600}
+.topo .tit small{font-size:11px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.topo .bt-ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.14);font-size:18px;position:relative}
+.topo .bt-ic .bol{position:absolute;top:-4px;right:-4px;background:var(--amar);color:#3D2E00;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;line-height:18px;padding:0 4px;text-align:center}
+.net{width:9px;height:9px;border-radius:50%;background:#4ADE80;box-shadow:0 0 0 3px rgba(74,222,128,.25);flex-shrink:0}
+.net.off{background:#F5B041;box-shadow:0 0 0 3px rgba(245,176,65,.25)}
+/* conteúdo */
+main{padding:12px 12px calc(84px + var(--baixo));max-width:720px;margin:0 auto}
+.filtros{position:sticky;top:calc(58px + var(--topo));z-index:10;background:var(--bg);padding:6px 0 8px;margin:-6px 0 4px}
+.busca{position:relative}.busca i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mut)}.busca input{padding-left:40px;border-radius:14px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;border:1.5px solid var(--borda);background:var(--card);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:500;color:var(--txt2);display:flex;align-items:center;gap:6px}
+.chip.on{background:var(--azul);border-color:var(--azul);color:#fff}
+.chip .cor{width:9px;height:9px;border-radius:50%}
+.maq-tit{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:14px 4px 6px;display:flex;align-items:center;gap:6px}
+.maq-tit .cor{width:8px;height:8px;border-radius:50%}
+.pessoa{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:var(--raio);padding:12px 14px;margin-bottom:8px;box-shadow:var(--sombra);width:100%;text-align:left}
+.pessoa:active{transform:scale(.985)}
+.av{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:linear-gradient(135deg,#0077C8,#003D71);flex-shrink:0}
+.pessoa .nm{flex:1;min-width:0}.pessoa .nm b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pessoa .nm small{color:var(--mut);font-size:12px}
+.hoje{display:flex;gap:2px;flex-shrink:0}
+.st-v{color:var(--verde)}.st-a{color:var(--amar);-webkit-text-stroke:.7px #B7950B}
+/* estrela do topo da ficha */
+.vazio{text-align:center;color:var(--mut);padding:50px 20px}.vazio i{font-size:42px;display:block;margin-bottom:10px;opacity:.6}
+.card{background:var(--card);border-radius:var(--raio);padding:14px;box-shadow:var(--sombra);margin-bottom:10px}
+.card h3{margin:0 0 10px;font-size:14px;display:flex;align-items:center;gap:8px}
+.lin{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--borda)}.lin:last-child{border-bottom:0}
+.lin .tx{flex:1;min-width:0}.lin .tx b{font-weight:600;display:block}.lin .tx small{color:var(--mut);font-size:12px;display:block}
+.lin.cancel{opacity:.45}.lin.cancel b{text-decoration:line-through}
+.bt{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:12px 16px;font-weight:600;background:var(--azul-cl);color:var(--azul)}
+.bt.pri{background:var(--azul);color:#fff}.bt.lg{width:100%;padding:15px;font-size:16px}.bt.peq{padding:7px 10px;font-size:13px;border-radius:10px}
+.bt.perigo{background:var(--verm-bg);color:var(--verm)}
+.bt:disabled{opacity:.5}
+.sub{color:var(--txt2);font-size:13px;line-height:1.45}
+label.campo{display:block;margin-bottom:12px;font-size:13px;font-weight:500;color:var(--txt2)}label.campo input,label.campo select,label.campo textarea{margin-top:5px}
+.msg{border-radius:12px;padding:10px 12px;font-size:13px;display:flex;gap:8px;margin-bottom:10px;line-height:1.4}.msg.info{background:var(--azul-cl);color:var(--azul)}.msg.warn{background:var(--amar-bg);color:var(--amar-esc)}.msg.erro{background:var(--verm-bg);color:var(--verm)}
+/* navegação de baixo */
+nav.abas{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--borda);display:flex;padding:6px 6px calc(6px + var(--baixo));box-shadow:0 -4px 16px rgba(0,30,60,.06)}
+nav.abas button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:500;color:var(--mut);padding:6px 0;border-radius:12px;position:relative}
+nav.abas button i{font-size:21px}nav.abas button.on{color:var(--azul)}nav.abas button.on i{transform:translateY(-1px)}
+nav.abas .bol{position:absolute;top:2px;left:calc(50% + 6px);background:var(--amar);color:#3D2E00;font-size:10px;font-weight:700;border-radius:10px;min-width:17px;height:17px;line-height:17px;padding:0 4px}
+/* folha de baixo (escolha da estrela) */
+.veu{position:fixed;inset:0;background:rgba(5,20,35,.45);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.veu.on{opacity:1;pointer-events:auto}
+.folha{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--bg);border-radius:22px 22px 0 0;max-height:88vh;overflow-y:auto;padding:8px 14px calc(16px + var(--baixo));transform:translateY(105%);transition:transform .25s cubic-bezier(.2,.8,.2,1);max-width:720px;margin:0 auto}
+.folha.on{transform:none}
+.folha .puxa{width:42px;height:5px;border-radius:3px;background:var(--borda);margin:4px auto 10px}
+.f-cab{display:flex;align-items:center;gap:12px;margin-bottom:12px}.f-cab .tx{flex:1;min-width:0}.f-cab b{font-size:17px;display:block}.f-cab small{color:var(--mut)}
+.dois{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.grande{border-radius:20px;padding:20px 10px 16px;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;font-size:16px;box-shadow:var(--sombra)}
+.grande i{font-size:44px}
+.grande.v{background:var(--verde-bg);color:var(--verde)}.grande.a{background:var(--amar-bg);color:var(--amar-esc)}.grande.a i{color:var(--amar);-webkit-text-stroke:1px #B7950B}
+.grande small{font-weight:500;font-size:11px;opacity:.8}
+.motivo{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border-radius:14px;padding:13px 14px;margin-bottom:8px;box-shadow:var(--sombra);border-left:5px solid var(--verde)}
+.motivo.a{border-left-color:var(--amar)}
+.motivo .tx{flex:1;min-width:0}.motivo b{display:block;font-weight:600}.motivo small{color:var(--mut);font-size:12px;display:block;margin-top:1px}
+.motivo .fav{color:#F39C12}
+.voltar{display:flex;align-items:center;gap:6px;color:var(--azul);font-weight:600;padding:6px 0 10px}
+/* telas de entrada (parear / PIN) */
+.entrada{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(24px + var(--topo)) 22px calc(24px + var(--baixo));background:linear-gradient(160deg,#0077C8 0%,#003D71 70%);color:#fff}
+.entrada .marca{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:22px;text-align:center}
+.entrada .marca img.ic{width:76px;height:76px;border-radius:22px;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.entrada .marca b{font-size:22px;font-weight:700}.entrada .marca small{opacity:.8;font-size:13px}
+.entrada .caixa{background:var(--card);color:var(--txt);border-radius:22px;padding:18px;width:100%;max-width:400px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.pontos{display:flex;justify-content:center;gap:14px;margin:8px 0 18px}.pontos i{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.7)}.pontos i.on{background:#fff;border-color:#fff}
+.pontos.erro{animation:treme .35s}
+@keyframes treme{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.teclado{display:grid;grid-template-columns:repeat(3,76px);gap:14px;justify-content:center}
+.teclado button{height:76px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:28px;font-weight:500}
+.teclado button:active{background:rgba(255,255,255,.3)}.teclado button.lim{background:none;font-size:15px}
+.entrada .pin-msg{min-height:22px;font-size:13px;margin-bottom:6px;text-align:center;opacity:.95}
+.entrada .rodape{margin-top:20px;font-size:11px;opacity:.7;text-align:center}
+.entrada a{color:#fff}
+/* aviso (toast) */
+.toast{position:fixed;left:12px;right:12px;bottom:calc(80px + var(--baixo));z-index:60;background:#1B2631;color:#fff;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:14px;box-shadow:0 8px 30px rgba(0,0,0,.3);transform:translateY(150%);transition:transform .25s;max-width:560px;margin:0 auto}
+.toast.on{transform:none}.toast .tx{flex:1;min-width:0}.toast button{color:#7FC4FF;font-weight:700;padding:4px 6px}
+.toast.erro{background:#922B21}
+.ver{text-align:center;color:var(--mut);font-size:11px;margin:18px 0 6px;line-height:1.6}
+.alerta{border-left:5px solid var(--amar)}.alerta.carta{border-left-color:var(--verm)}
+.selo{font-size:11px;font-weight:700;border-radius:8px;padding:3px 8px;flex-shrink:0}.selo.verbal{background:var(--amar-bg);color:var(--amar-esc)}.selo.carta{background:var(--verm-bg);color:var(--verm)}
+.cnt{font-variant-numeric:tabular-nums}
+.mini-bar{height:8px;border-radius:5px;background:var(--borda);display:flex;overflow:hidden;margin-top:6px}.mini-bar i{display:block;height:100%}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="veu" id="veu" onclick="fecharFolha()"></div>
+<div class="folha" id="folha"></div>
+<div class="toast" id="toast"><div class="tx" id="toastTx"></div><button id="toastBt" class="oculto"></button></div>
+<script src="estrelas-regras.js"></script>
+<script>
+'use strict';
+const VERSAO = '1.1';
+const LS = { cfg: 'est-cfg', dados: 'est-dados', tent: 'est-tent', pref: 'est-pref' };
+const URL_OK = u => /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(u) || (/^(127\.0\.0\.1|localhost)$/.test(location.hostname) && /^http:\/\/127\.0\.0\.1:\d+\/exec$/.test(u));
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+const dataBR = iso => iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) : '';
+const iniciais = n => String(n || '').split(/\s+/).filter(Boolean).filter((x, i, a) => i === 0 || i === a.length - 1).map(x => x[0]).join('').toUpperCase();
+const curto = n => { const p = String(n || '').split(/\s+/).filter(Boolean); return p.length > 2 ? p[0] + ' ' + p[p.length - 1] : p.join(' '); };
+const uuid = () => crypto.randomUUID ? crypto.randomUUID() : Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('');
+const COR = { 'Destaque': 'v', 'Atenção': 'a' };
+const ICO_COMP = { 'Segurança': 'bi-shield-check', 'Qualidade': 'bi-rulers', 'Foco e disciplina': 'bi-bullseye', 'Colaboração e iniciativa': 'bi-people' };
+const est = (tipo, tam) => `<i class="bi bi-star-fill st-${COR[tipo] || 'v'}" ${tam ? `style="font-size:${tam}px"` : ''}></i>`;
+const ler = (k, p) => { try { return JSON.parse(localStorage.getItem(k)) ?? p; } catch (_) { return p; } };
+const gravar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} };
+
+// ---------------------------------------------------------------- cofre (PIN → chave AES-GCM; nada legível no aparelho sem o PIN)
+const te = new TextEncoder(), td = new TextDecoder();
+const b64 = u8 => { let s = ''; for (let i = 0; i < u8.length; i += 8192) s += String.fromCharCode.apply(null, u8.subarray(i, i + 8192)); return btoa(s); };
+const ub64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+let K = null, C = null; // chave AES e configuração (url, chave, líder) só na memória enquanto destravado
+let D = vazioD();
+function vazioD() { return { equipe: { pessoas: [], maquinas: [], grupos: [] }, motivos: [], competencias: [], verbal: 2, limite: 3, dias: 30, estrelas: [], fila: [], equipeEm: 0, sincEm: 0, modelos: null }; }
+async function derivar(pin, salt) {
+  const base = await crypto.subtle.importKey('raw', te.encode(pin), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 250000, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function cifrar(obj) { const iv = crypto.getRandomValues(new Uint8Array(12)); return { iv: b64(iv), ct: b64(new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, K, te.encode(JSON.stringify(obj))))) }; }
+async function decifrar(o) { return JSON.parse(td.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: ub64(o.iv) }, K, ub64(o.ct)))); }
+let salvando = Promise.resolve();
+function salvarD() { salvando = salvando.then(async () => { if (K) gravar(LS.dados, await cifrar(D)); }).catch(() => {}); return salvando; }
+function apagarTudo() { [LS.cfg, LS.dados, LS.tent].forEach(k => { try { localStorage.removeItem(k); } catch (_) {} }); K = null; C = null; D = vazioD(); }
+
+// ---------------------------------------------------------------- planilha (Apps Script /exec; texto puro = sem pré-verificação CORS)
+async function chamar(acao, extra, url, chave) {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 60000);
+  try {
+    const r = await fetch(url || C.url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...extra, acao, chave: chave === undefined ? C.chave : chave }), redirect: 'follow', signal: ctl.signal, cache: 'no-store' });
+    const j = await r.json().catch(() => ({ ok: false, erro: 'A planilha não respondeu como esperado (HTTP ' + r.status + ').' }));
+    if (!j.ok && /Chave inválida/.test(j.erro || '') && C) { revogado(); }
+    return j;
+  } catch (e) { return { ok: false, offline: true, erro: e.name === 'AbortError' ? 'Tempo esgotado.' : 'Sem internet.' }; }
+  finally { clearTimeout(t); }
+}
+function revogado() {
+  apagarTudo();
+  telaParear('Este celular foi desconectado da planilha (revogado no PC ou chave trocada). Peça um novo código de pareamento.');
+}
+
+// ---------------------------------------------------------------- PIN, espera e bloqueio por inatividade
+const pref = () => ({ minutos: 5, ...ler(LS.pref, {}) });
+let ultimo = Date.now(), escondidoEm = 0;
+['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(ev => addEventListener(ev, () => { ultimo = Date.now(); }, { passive: true }));
+setInterval(() => { if (K && Date.now() - ultimo > pref().minutos * 60000) travar('Bloqueado por inatividade.'); }, 15000);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) escondidoEm = Date.now();
+  else if (K && escondidoEm && Date.now() - escondidoEm > Math.min(pref().minutos, 2) * 60000) travar('Bloqueado: o app ficou em segundo plano.');
+  else if (K && navigator.onLine) sincronizar();
+});
+function travar(msg) { K = null; C = null; D = vazioD(); fecharFolha(); telaPin('entrar', msg); }
+function esperaSeg() { const t = ler(LS.tent, {}); return Math.max(0, Math.ceil(((t.ate || 0) - Date.now()) / 1000)); }
+
+let pinBuf = '', pinModo = 'entrar', pinPrimeiro = '', pinNovoC = null;
+function limparToast() { clearTimeout(toast.t); const t = $("#toast"); if (t) t.classList.remove("on"); }
+function telaPin(modo, msg) {
+  limparToast();
+  pinModo = modo; pinBuf = '';
+  const tit = { entrar: 'Digite seu PIN', criar: 'Crie um PIN de 4 a 6 números', confirmar: 'Repita o PIN' }[modo];
+  $('#app').innerHTML = `<div class="entrada"><div class="marca"><img class="ic" src="icones/icone-192.png" alt=""><b>Estrelas da Ronda</b><small>${esc(tit)}</small></div>
+    <div class="pin-msg" id="pinMsg">${esc(msg || '')}</div><div class="pontos" id="pontos">${'<i></i>'.repeat(6)}</div>
+    <div class="teclado">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button onclick="tecla('${n}')">${n}</button>`).join('')}
+      <button class="lim" onclick="tecla('apaga')" title="Apagar"><i class="bi bi-backspace"></i></button><button onclick="tecla('0')">0</button><button class="lim" onclick="tecla('ok')">OK</button></div>
+    <div class="rodape">KSB Brasil © 2026 · v${VERSAO}${modo === 'entrar' ? '<br><a href="#" onclick="esqueci();return false">Esqueci o PIN</a>' : ''}</div></div>`;
+  const s = esperaSeg(); if (modo === 'entrar' && s) mostrarEspera();
+}
+function pontos() { document.querySelectorAll('#pontos i').forEach((p, i) => p.classList.toggle('on', i < pinBuf.length)); }
+function mostrarEspera() { const s = esperaSeg(); $('#pinMsg').textContent = s ? 'Muitas tentativas. Aguarde ' + s + ' s.' : ''; if (s) setTimeout(mostrarEspera, 1000); }
+async function tecla(t) {
+  if (t === 'apaga') { pinBuf = pinBuf.slice(0, -1); return pontos(); }
+  if (t !== 'ok') { if (pinBuf.length < 6) pinBuf += t; pontos(); if (!(pinModo === 'entrar' && pinBuf.length === 6)) return; }
+  if (pinBuf.length < 4) return erroPin('Mínimo de 4 números.');
+  if (pinModo === 'criar') {
+    if (/^(\d)\1+$/.test(pinBuf) || '0123456789'.includes(pinBuf) || '9876543210'.includes(pinBuf)) return erroPin('PIN fácil demais. Escolha outro.');
+    pinPrimeiro = pinBuf; return telaPin('confirmar');
+  }
+  if (pinModo === 'confirmar') {
+    if (pinBuf !== pinPrimeiro) { pinPrimeiro = ''; return telaPin('criar', 'Os PINs não conferem. Comece de novo.'); }
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    K = await derivar(pinBuf, salt); C = pinNovoC; pinNovoC = null;
+    gravar(LS.cfg, { salt: b64(salt), ...(await cifrar(C)), v: 1 });
+    D = vazioD(); await salvarD(); ultimo = Date.now();
+    principal(); sincronizar(true); return;
+  }
+  // entrar
+  if (esperaSeg()) return mostrarEspera();
+  const cfg = ler(LS.cfg, null); if (!cfg) return telaParear();
+  $('#pinMsg').textContent = 'Conferindo…';
+  try {
+    K = await derivar(pinBuf, ub64(cfg.salt)); C = await decifrar(cfg);
+    gravar(LS.tent, {});
+    const d = ler(LS.dados, null); D = d ? { ...vazioD(), ...(await decifrar(d)) } : vazioD();
+    ultimo = Date.now(); principal(); sincronizar();
+  } catch (_) {
+    K = null; C = null;
+    const tt = ler(LS.tent, {}); tt.n = (tt.n || 0) + 1;
+    if (tt.n % 5 === 0) { tt.serie = (tt.serie || 0) + 1; tt.ate = Date.now() + 60000 * Math.pow(2, tt.serie - 1); }
+    gravar(LS.tent, tt);
+    erroPin(tt.ate > Date.now() ? '' : 'PIN errado.'); if (esperaSeg()) mostrarEspera();
+  }
+}
+function erroPin(m) { pinBuf = ''; pontos(); const p = $('#pontos'); p.classList.remove('erro'); void p.offsetWidth; p.classList.add('erro'); if (m) $('#pinMsg').textContent = m; }
+function esqueci() {
+  if (!confirm('Sem o PIN não dá para abrir os dados deste celular. Desconectar e parear de novo? (As estrelas que ainda não subiram serão perdidas.)')) return;
+  apagarTudo(); telaParear();
+}
+
+// ---------------------------------------------------------------- pareamento (código de 8 letras gerado no PC, vale 10 min)
+function telaParear(msg) {
+  if (!msg) limparToast();
+  $('#app').innerHTML = `<div class="entrada"><div class="marca"><img class="ic" src="icones/icone-192.png" alt=""><b>Estrelas da Ronda</b><small>Processo Usinagem · KSB Jundiaí</small></div>
+    <div class="caixa">${msg ? `<div class="msg warn"><i class="bi bi-exclamation-triangle"></i><div>${esc(msg)}</div></div>` : ''}
+      <div class="sub" style="margin-bottom:12px">No PC: <b>Estrelas da ronda › Celular › Gerar código</b>.</div>
+      <label class="campo">Endereço da planilha (termina em /exec)<input id="pUrl" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://script.google.com/macros/s/…/exec"></label>
+      <label class="campo">Código de pareamento<input id="pCod" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="ABCD-1234" style="letter-spacing:.15em;font-weight:600;text-transform:uppercase"></label>
+      <button class="bt pri lg" id="btPar" onclick="parear()"><i class="bi bi-link-45deg"></i> Parear este celular</button>
+      <div id="dicaInstalar"></div>
+      <div class="sub" style="margin-top:12px;font-size:12px"><i class="bi bi-shield-lock"></i> A chave criada no pareamento fica só neste aparelho, cifrada com o seu PIN.</div></div>
+    <div class="rodape">KSB Brasil © 2026 · v${VERSAO} · &lt;/&gt; Rogerinho Ramos</div></div>`;
+  dicaInstalar();
+}
+async function parear() {
+  const url = $('#pUrl').value.trim(), cod = $('#pCod').value.trim();
+  if (!URL_OK(url)) return toast('Endereço inválido: copie do PC (Configurações › Planilha), termina em /exec.', 'erro');
+  if (cod.replace(/[^A-Za-z0-9]/g, '').length !== 8) return toast('O código tem 8 letras/números.', 'erro');
+  const bt = $('#btPar'); bt.disabled = true; bt.innerHTML = '<i class="bi bi-arrow-repeat"></i> Conferindo…';
+  const ap = /iPhone|iPad/.test(navigator.userAgent) ? 'iPhone' : /Android/.test(navigator.userAgent) ? 'Android' : 'navegador';
+  const j = await chamar('parear', { codigo: cod, aparelho: ap }, url, '');
+  bt.disabled = false; bt.innerHTML = '<i class="bi bi-link-45deg"></i> Parear este celular';
+  if (!j.ok) return toast(j.erro || 'Não deu certo.', 'erro');
+  pinNovoC = { url, chave: j.chave, lider: j.lider, papel: j.papel, planilha: j.planilha };
+  telaPin('criar', 'Pareado com ' + j.lider + '. Agora crie o PIN deste celular.');
+}
+
+// ---------------------------------------------------------------- sincronização (fila primeiro: nada se perde sem internet)
+let sincronizando = false, deNovo = false;
+async function enviarFila() {
+  if (!D.fila.length) return;
+  const lote = D.fila.slice(0, 100);
+  const j = await chamar('salvarEstrelas', { estrelas: lote });
+  if (!j.ok) return;
+  const okIds = new Set(j.resultado.filter(r => r.ok).map(r => r.id)), ruins = j.resultado.filter(r => !r.ok);
+  const sai = new Set([...okIds, ...ruins.map(r => r.id)]);
+  D.fila = D.fila.filter(e => !sai.has(e.id));
+  D.estrelas.forEach(e => { if (okIds.has(e.id)) e.pendente = false; });
+  if (ruins.length) { D.estrelas = D.estrelas.filter(e => !ruins.some(r => r.id === e.id)); toast(ruins.length + ' estrela(s) recusada(s): ' + ruins[0].erro, 'erro'); }
+  await salvarD();
+}
+async function sincronizar(forcarEquipe) {
+  if (!K) return; if (sincronizando) { deNovo = true; return; } sincronizando = true; deNovo = false; marcaRede(true);
+  try {
+    await enviarFila();
+    const desde = ESTRELAS.isoMenos(ESTRELAS.isoHoje(), 90);
+    const precisaEquipe = forcarEquipe || !D.equipe.pessoas.length || Date.now() - D.equipeEm > 4 * 3600000;
+    const [m, e, q] = await Promise.all([chamar('motivos', {}), chamar('estrelas', { desde }), precisaEquipe ? chamar('equipe', {}) : Promise.resolve(null)]);
+    if (!K) return;
+    if (m.ok) Object.assign(D, { motivos: m.motivos, competencias: m.competencias, verbal: m.verbal, limite: m.limite, dias: m.dias });
+    if (e.ok) { const pend = D.estrelas.filter(x => x.pendente && D.fila.some(f => f.id === x.id)); D.estrelas = e.estrelas.concat(pend); }
+    if (q && q.ok) { D.equipe = { pessoas: q.pessoas, maquinas: q.maquinas, grupos: q.grupos }; D.equipeEm = Date.now(); }
+    else if (q && !q.ok && !q.offline) toast(q.erro, 'erro');
+    if (m.ok || e.ok) D.sincEm = Date.now();
+    marcaRede(!(m.offline || e.offline));
+    await salvarD(); render();
+  } finally { sincronizando = false; if (deNovo && K) setTimeout(sincronizar, 300); }
+}
+addEventListener('online', () => { marcaRede(true); sincronizar(); });
+addEventListener('offline', () => marcaRede(false));
+function marcaRede(on) { const n = $('#net'); if (n) { n.classList.toggle('off', !on || !navigator.onLine); n.title = on && navigator.onLine ? 'Conectado' : 'Sem internet: as estrelas ficam guardadas e sobem depois'; } }
+
+// ---------------------------------------------------------------- tela principal
+const UI = { aba: 'ronda', turno: '', grupo: '', busca: '' };
+function principal() {
+  UI.turno = UI.turno || pref().turno || '';
+  $('#app').innerHTML = `<header class="topo"><img class="logo" src="logo_ksb.svg" alt="KSB"><div class="tit"><b>Estrelas da Ronda</b><small id="sub"></small></div><span class="net" id="net"></span>
+      <button class="bt-ic" onclick="sincronizar(true)" title="Sincronizar"><i class="bi bi-arrow-repeat"></i><span class="bol oculto" id="bolFila"></span></button>
+      <button class="bt-ic" onclick="travar('Bloqueado.')" title="Bloquear"><i class="bi bi-lock"></i></button></header>
+    <main id="corpo"></main>
+    <nav class="abas">${[['ronda', 'bi-star-half', 'Ronda'], ['hoje', 'bi-clock-history', 'Recentes'], ['alertas', 'bi-exclamation-triangle', 'Alertas'], ['resumo', 'bi-bar-chart', 'Resumo'], ['mais', 'bi-three-dots', 'Mais']].map(([v, ic, t]) => `<button data-aba="${v}" onclick="irAba('${v}')"><i class="bi ${ic}"></i>${t}${v === 'alertas' ? '<span class="bol oculto" id="bolAl"></span>' : ''}</button>`).join('')}</nav>`;
+  limparToast();
+  marcaRede(navigator.onLine); render();
+}
+function irAba(a) { UI.aba = a; render(); scrollTo(0, 0); }
+function render() {
+  if (!K || !$('#corpo')) return;
+  document.querySelectorAll('nav.abas button').forEach(b => b.classList.toggle('on', b.dataset.aba === UI.aba));
+  $('#sub').textContent = (C.papel === 'Admin' ? 'Administrador' : 'Líder') + ' · ' + curto(C.lider);
+  const bf = $('#bolFila'); bf.classList.toggle('oculto', !D.fila.length); bf.textContent = D.fila.length;
+  const nA = ESTRELAS.alertas(D.estrelas, D).length, ba = $('#bolAl'); ba.classList.toggle('oculto', !nA); ba.textContent = nA;
+  ({ ronda: abaRonda, hoje: abaHoje, alertas: abaAlertas, resumo: abaResumo, mais: abaMais })[UI.aba]();
+}
+const grupoDe = p => { const m = D.equipe.maquinas.find(x => norm(x.maquina) === norm(p.maquina)); return m ? m.grupo : ''; };
+const corGrupo = g => { const x = D.equipe.grupos.find(y => y.grupo === g); return x && x.cor ? x.cor : '#95A5A6'; };
+function abaRonda() {
+  const P = D.equipe.pessoas;
+  if (!P.length) { $('#corpo').innerHTML = `<div class="vazio"><i class="bi bi-cloud-download"></i>${D.sincEm ? 'A equipe não veio da planilha.' : 'Carregando a equipe…'}<br><br><button class="bt" onclick="sincronizar(true)"><i class="bi bi-arrow-repeat"></i> Tentar de novo</button></div>`; return; }
+  const turnos = [...new Set(P.map(p => p.turno).filter(Boolean))].sort();
+  const grupos = D.equipe.grupos.slice().sort((a, b) => a.ordem - b.ordem).map(g => g.grupo).filter(g => P.some(p => grupoDe(p) === g));
+  $('#corpo').innerHTML = `<div class="filtros"><div class="busca"><i class="bi bi-search"></i><input type="search" id="busca" placeholder="Nome, matrícula ou máquina" value="${esc(UI.busca)}" oninput="UI.busca=this.value;listaRonda()"></div>
+    <div class="chips"><button class="chip ${!UI.turno ? 'on' : ''}" onclick="UI.turno='';guardaTurno();abaRonda()">Todos</button>${turnos.map(t => `<button class="chip ${UI.turno === t ? 'on' : ''}" onclick="UI.turno='${esc(t)}';guardaTurno();abaRonda()">Turno ${esc(t)}</button>`).join('')}</div>
+    ${grupos.length > 1 ? `<div class="chips"><button class="chip ${!UI.grupo ? 'on' : ''}" onclick="UI.grupo='';abaRonda()">Todas as máquinas</button>${grupos.map(g => `<button class="chip ${UI.grupo === g ? 'on' : ''}" onclick="UI.grupo='${esc(g)}';abaRonda()"><span class="cor" style="background:${esc(corGrupo(g))}"></span>${esc(g)}</button>`).join('')}</div>` : ''}</div>
+    <div id="lista"></div>`;
+  listaRonda();
+}
+function guardaTurno() { const p = pref(); p.turno = UI.turno; gravar(LS.pref, p); }
+function listaRonda() {
+  const b = norm(UI.busca), hoje = ESTRELAS.isoHoje();
+  const L = D.equipe.pessoas.filter(p => (!UI.turno || p.turno === UI.turno) && (!UI.grupo || grupoDe(p) === UI.grupo) && (!b || norm(p.nome).includes(b) || String(p.mat).includes(b) || norm(p.maquina).includes(b)));
+  const ordemG = g => { const x = D.equipe.grupos.find(y => y.grupo === g); return x ? x.ordem : 99; };
+  const porMaq = {}; L.forEach(p => { (porMaq[p.maquina || '—'] = porMaq[p.maquina || '—'] || []).push(p); });
+  const maqs = Object.keys(porMaq).sort((a, c) => ordemG(grupoDe({ maquina: a })) - ordemG(grupoDe({ maquina: c })) || a.localeCompare(c));
+  const deHoje = mat => D.estrelas.filter(e => ESTRELAS.ativa(e) && String(e.mat) === String(mat) && e.data === hoje);
+  $('#lista').innerHTML = L.length ? maqs.map(m => { const g = grupoDe({ maquina: m }); return `<div class="maq-tit"><span class="cor" style="background:${esc(corGrupo(g))}"></span>${esc(m)}${g ? ' · ' + esc(g) : ''}</div>` + porMaq[m].sort((x, y) => x.nome.localeCompare(y.nome)).map(p => {
+    const h = deHoje(p.mat);
+    return `<button class="pessoa" onclick="abrirPessoa('${esc(p.mat)}')"><span class="av">${esc(iniciais(p.nome))}</span><span class="nm"><b>${esc(curto(p.nome))}</b><small>Turno ${esc(p.turno || '—')} · Mat. ${esc(p.mat)}</small></span><span class="hoje">${h.map(e => est(e.tipo, 16)).join('')}</span><i class="bi bi-chevron-right" style="color:var(--mut)"></i></button>`;
+  }).join(''); }).join('') : '<div class="vazio"><i class="bi bi-search"></i>Ninguém com esses filtros.</div>';
+}
+
+// ---------------------------------------------------------------- folha: pessoa → tipo → motivo (3 toques)
+let F = null;
+function abrirFolha(html) { $('#folha').innerHTML = '<div class="puxa"></div>' + html; $('#folha').classList.add('on'); $('#veu').classList.add('on'); $('#folha').scrollTop = 0; }
+function fecharFolha() { $('#folha').classList.remove('on'); $('#veu').classList.remove('on'); F = null; }
+function abrirPessoa(mat, tipo) {
+  const p = D.equipe.pessoas.find(x => String(x.mat) === String(mat)); if (!p) return;
+  F = F && F.mat === mat ? { ...F, tipo } : { mat, tipo, maquina: p.maquina || '' };
+  const d30 = ESTRELAS.isoMenos(ESTRELAS.isoHoje(), 29), R = D.estrelas.filter(e => ESTRELAS.ativa(e) && String(e.mat) === String(mat) && e.data >= d30);
+  const cab = `<div class="f-cab"><span class="av">${esc(iniciais(p.nome))}</span><div class="tx"><b>${esc(curto(p.nome))}</b><small>Mat. ${esc(p.mat)} · Turno ${esc(p.turno || '—')} · 30 dias: ${R.filter(e => e.tipo === 'Destaque').length} ${est('Destaque')} ${R.filter(e => e.tipo === 'Atenção').length} ${est('Atenção')}</small></div><button class="bt peq" onclick="fecharFolha()"><i class="bi bi-x-lg"></i></button></div>`;
+  if (!tipo) {
+    abrirFolha(cab + `<label class="campo">Máquina agora<select onchange="F.maquina=this.value">${[...new Set([p.maquina].concat(D.equipe.maquinas.map(m => m.maquina)).filter(Boolean))].map(m => `<option ${m === F.maquina ? 'selected' : ''}>${esc(m)}</option>`).join('')}</select></label>
+      <div class="dois"><button class="grande v" onclick="abrirPessoa('${esc(mat)}','Destaque')"><i class="bi bi-star-fill"></i>Destaque<small>o que foi bem</small></button><button class="grande a" onclick="abrirPessoa('${esc(mat)}','Atenção')"><i class="bi bi-star-fill"></i>Atenção<small>o que corrigir</small></button></div>
+      ${R.length ? `<div class="sub" style="margin-top:6px">Últimas: ${R.slice(-4).reverse().map(e => est(e.tipo) + ' ' + dataBR(e.data) + ' ' + esc(e.motivo)).join(' · ')}</div>` : ''}`);
+    return;
+  }
+  const M = ESTRELAS.ordenar(D.motivos, tipo);
+  abrirFolha(cab + `<button class="voltar" onclick="abrirPessoa('${esc(mat)}')"><i class="bi bi-arrow-left"></i> ${est(tipo)} ${tipo}</button>
+    ${M.map(m => `<button class="motivo ${COR[tipo]}" onclick="registrar('${esc(m.id)}')"><span class="tx"><b>${esc(m.nome)}</b><small><i class="bi ${ICO_COMP[m.competencia] || 'bi-dot'}"></i> ${esc(m.competencia)}${m.frase ? ' · “' + esc(m.frase) + '”' : ''}</small></span>${m.favorito ? '<i class="bi bi-bookmark-star-fill fav"></i>' : ''}</button>`).join('') || '<div class="vazio">Sem motivos. Sincronize.</div>'}`);
+}
+async function registrar(motivoId) {
+  const p = D.equipe.pessoas.find(x => String(x.mat) === String(F.mat)), m = D.motivos.find(x => x.id === motivoId);
+  const agora = new Date();
+  const e = { id: 'cel-' + uuid(), data: ESTRELAS.isoHoje(), hora: String(agora.getHours()).padStart(2, '0') + ':' + String(agora.getMinutes()).padStart(2, '0'), motivoId, mat: p.mat, nome: p.nome, turno: p.turno, maquina: F.maquina || p.maquina, lider: p.lider, origem: 'Celular' };
+  D.fila.push(e);
+  D.estrelas.push({ ...e, tipo: m.tipo, motivo: m.nome, competencia: m.competencia, situacao: 'Ativa', pendente: true, criadoPor: C.lider });
+  fecharFolha(); await salvarD(); render();
+  if (navigator.vibrate) navigator.vibrate(m.tipo === 'Destaque' ? 30 : [20, 40, 20]);
+  toast(`${est(m.tipo)} <b>${esc(m.tipo)}</b> · ${esc(curto(p.nome).split(' ')[0])} · ${esc(m.nome)}`, 'ok', 'Desfazer', () => desfazer(e.id), true);
+  enviarFila().then(render);
+}
+async function desfazer(id) {
+  if (D.fila.some(e => e.id === id)) { D.fila = D.fila.filter(e => e.id !== id); D.estrelas = D.estrelas.filter(e => e.id !== id); await salvarD(); render(); return toast('Desfeito.'); }
+  const j = await chamar('cancelarEstrela', { id });
+  if (!j.ok) return toast(j.erro, 'erro');
+  const e = D.estrelas.find(x => x.id === id); if (e) e.situacao = 'Cancelada'; await salvarD(); render(); toast('Estrela cancelada.');
+}
+
+// ---------------------------------------------------------------- recentes, alertas, resumo
+function abaHoje() {
+  const d7 = ESTRELAS.isoMenos(ESTRELAS.isoHoje(), 6);
+  const L = D.estrelas.filter(e => e.data >= d7).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
+  const dias = [...new Set(L.map(e => e.data))];
+  $('#corpo').innerHTML = L.length ? dias.map(d => `<div class="maq-tit">${d === ESTRELAS.isoHoje() ? 'Hoje' : dataBR(d)}</div><div class="card">${L.filter(e => e.data === d).map(e => `<div class="lin ${e.situacao === 'Cancelada' ? 'cancel' : ''}">${est(e.tipo, 22)}<div class="tx"><b>${esc(curto(e.nome))}</b><small>${esc(e.hora)} · ${esc(e.motivo)} · ${esc(e.maquina || '')}${e.pendente ? ' · <i class="bi bi-cloud-slash"></i> aguardando internet' : ''}</small></div>${e.situacao === 'Cancelada' ? '<small class="sub">cancelada</small>' : `<button class="bt peq" onclick="if(confirm('Cancelar esta estrela?'))desfazer('${esc(e.id)}')"><i class="bi bi-x-lg"></i></button>`}</div>`).join('')}</div>`).join('') : '<div class="vazio"><i class="bi bi-star"></i>Nenhuma estrela nos últimos 7 dias.</div>';
+}
+function abaAlertas() {
+  const A = ESTRELAS.alertas(D.estrelas, D);
+  $('#corpo').innerHTML = `<div class="msg info"><i class="bi bi-info-circle"></i><div>Mesmo motivo de ${est('Atenção')} em ${D.dias} dias: ${D.verbal ? `<b>${D.verbal}</b> → formalizar orientação verbal · ` : ''}<b>${D.limite}</b> → carta. É sugestão: converse e faça no PC (Estrelas › Alertas).</div></div>
+    ${A.length ? A.map(a => `<div class="card alerta ${a.nivel}"><div class="lin" style="padding:0;border:0"><span class="av">${esc(iniciais(a.nome))}</span><div class="tx"><b>${esc(curto(a.nome))}</b><small>${esc(a.motivo)} · ${a.qtd}× em ${a.datas.map(dataBR).join(', ')}</small></div><span class="selo ${a.nivel}">${a.nivel === 'carta' ? 'Carta' : 'Verbal'}</span></div></div>`).join('') : '<div class="vazio"><i class="bi bi-emoji-smile"></i>Nenhum alerta aberto.</div>'}`;
+}
+function abaResumo() {
+  const mes = ESTRELAS.isoHoje().slice(0, 7), R = ESTRELAS.resumo(D.estrelas, mes + '-01', mes + '-31');
+  const C2 = D.competencias.length ? D.competencias : Object.keys(R.comp);
+  const barra = (d, a) => { const t = Math.max(1, d + a); return `<div class="mini-bar"><i style="width:${d / t * 100}%;background:var(--verde)"></i><i style="width:${a / t * 100}%;background:var(--amar)"></i></div>`; };
+  $('#corpo').innerHTML = `<div class="card"><h3><i class="bi bi-calendar3"></i>Este mês</h3><div class="dois" style="margin:0"><div class="grande v" style="padding:12px"><span class="cnt" style="font-size:28px">${R.d}</span><small>Destaques</small></div><div class="grande a" style="padding:12px"><span class="cnt" style="font-size:28px">${R.a}</span><small>Atenções</small></div></div>
+      <div class="sub" style="margin-top:10px">Verde : amarela = <b>${R.proporcao === null ? (R.d ? 'só verdes' : '—') : R.proporcao.toFixed(1).replace('.', ',') + ' : 1'}</b> · meta da liderança ≥ 3 : 1</div></div>
+    <div class="card"><h3><i class="bi bi-diagram-3"></i>Por competência</h3>${C2.map(c => { const x = R.comp[c] || { d: 0, a: 0 }; return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px"><span><i class="bi ${ICO_COMP[c] || 'bi-dot'}"></i> ${esc(c)}</span><span class="cnt">${x.d} ${est('Destaque')} ${x.a} ${est('Atenção')}</span></div>${barra(x.d, x.a)}</div>`; }).join('')}</div>
+    <div class="card"><h3><i class="bi bi-people"></i>Pessoas</h3>${R.pessoas.length ? R.pessoas.map(p => `<div class="lin"><div class="tx"><b>${esc(curto(p.nome))}</b>${barra(p.d, p.a)}</div><span class="cnt">${p.d} ${est('Destaque')} ${p.a} ${est('Atenção')}</span></div>`).join('') : '<div class="sub">Nada neste mês.</div>'}</div>`;
+}
+
+// ---------------------------------------------------------------- mais: sincronizar, motivos (admin), bloqueio, desparear
+function abaMais() {
+  const adm = C.papel === 'Admin', pr = pref();
+  $('#corpo').innerHTML = `<div class="card"><h3><i class="bi bi-cloud-check"></i>Planilha</h3><div class="sub">${esc(C.planilha || '')}<br>Última sincronização: ${D.sincEm ? new Date(D.sincEm).toLocaleString('pt-BR') : '—'}<br>Equipe: ${D.equipe.pessoas.length} pessoas${D.fila.length ? `<br><b>${D.fila.length} estrela(s) esperando internet</b>` : ''}</div>
+      <div style="margin-top:10px"><button class="bt" onclick="sincronizar(true)"><i class="bi bi-arrow-repeat"></i> Sincronizar agora</button></div></div>
+    <div class="card"><h3><i class="bi bi-list-stars"></i>Motivos ${adm ? '' : '<small class="sub">(só o administrador edita)</small>'}</h3>
+      ${['Destaque', 'Atenção'].map(t => `<div class="maq-tit" style="margin-top:4px">${est(t)} ${t}${adm ? `<button class="bt peq" style="margin-left:auto" onclick="editarMotivo('','${t}')"><i class="bi bi-plus-lg"></i></button>` : ''}</div>${D.motivos.filter(m => m.tipo === t).sort((a, b) => a.ordem - b.ordem).map((m, i, L) => `<div class="lin"><button class="bt peq" ${adm ? `onclick="favMotivo('${esc(m.id)}')"` : 'disabled'} style="${m.favorito ? 'color:#F39C12' : ''}"><i class="bi ${m.favorito ? 'bi-bookmark-star-fill' : 'bi-bookmark'}"></i></button><div class="tx"><b>${esc(m.nome)}</b><small>${esc(m.competencia)}</small></div>${adm ? `<button class="bt peq" ${i ? '' : 'disabled'} onclick="moverMotivo('${esc(m.id)}',-1)"><i class="bi bi-arrow-up"></i></button><button class="bt peq" onclick="editarMotivo('${esc(m.id)}')"><i class="bi bi-pencil"></i></button>` : ''}</div>`).join('')}`).join('')}</div>
+    <div class="card"><h3><i class="bi bi-shield-lock"></i>Segurança</h3>
+      <label class="campo">Bloquear depois de<select onchange="const p=pref();p.minutos=Number(this.value);gravar(LS.pref,p)">${[1, 3, 5, 10].map(n => `<option value="${n}" ${n === pr.minutos ? 'selected' : ''}>${n} minuto${n > 1 ? 's' : ''} sem uso</option>`).join('')}</select></label>
+      <button class="bt perigo" onclick="desparear()"><i class="bi bi-phone-flip"></i> Desconectar este celular</button></div>
+    <div id="dicaInstalar"></div>
+    <div class="ver">Estrelas da Ronda v${VERSAO}<br>KSB Brasil © 2026 · Processo Usinagem<br>&lt;/&gt; Rogerinho Ramos · Col 3:23</div>`;
+  dicaInstalar();
+}
+function desparear() {
+  if (!confirm('Desconectar e apagar os dados deste celular?' + (D.fila.length ? ' ' + D.fila.length + ' estrela(s) ainda não subiram e serão perdidas.' : ''))) return;
+  apagarTudo(); telaParear('Celular desconectado. Para revogar a chave também, use o PC (Estrelas › Celular › Revogar).');
+}
+async function motivosAdmin(acao, extra, msg) {
+  const j = await chamar(acao, extra); if (!j.ok) { toast(j.erro, 'erro'); return false; }
+  const m = await chamar('motivos', {}); if (m.ok) { Object.assign(D, { motivos: m.motivos }); await salvarD(); }
+  if (msg) toast(msg); render(); return true;
+}
+function favMotivo(id) { const m = D.motivos.find(x => x.id === id); motivosAdmin('salvarMotivo', { motivo: { ...m, favorito: !m.favorito } }); }
+function moverMotivo(id, d) {
+  const L = D.motivos.slice().sort((a, b) => a.ordem - b.ordem), mesmo = L.filter(x => x.tipo === L.find(y => y.id === id).tipo), k = mesmo.findIndex(x => x.id === id), alvo = mesmo[k + d]; if (!alvo) return;
+  const ids = L.map(x => x.id), a = ids.indexOf(id), b = ids.indexOf(alvo.id); [ids[a], ids[b]] = [ids[b], ids[a]];
+  motivosAdmin('ordenarMotivos', { ids });
+}
+async function editarMotivo(id, tipoNovo) {
+  const m = D.motivos.find(x => x.id === id) || { id: '', tipo: tipoNovo, nome: '', competencia: D.competencias[0], frase: '', carta: '', favorito: false };
+  if (m.tipo === 'Atenção' && !D.modelos) { const r = await chamar('modelos', {}); D.modelos = r.ok && !r.vazio ? r.modelos.map(x => ({ id: x.id, nome: x.nome })) : [{ id: 'celular', nome: 'Celular' }, { id: 'epi', nome: 'EPI' }, { id: 'risco', nome: 'Conduta de risco' }, { id: 'pontualidade', nome: 'Pontualidade' }, { id: 'faltas', nome: 'Faltas' }, { id: 'conduta', nome: 'Conduta' }, { id: 'autocontrole', nome: 'Autocontrole' }, { id: 'foco', nome: 'Foco no trabalho' }]; }
+  F = { motivo: m };
+  abrirFolha(`<div class="f-cab"><div class="tx"><b>${id ? 'Editar motivo' : 'Novo motivo'}</b><small>${est(m.tipo)} ${m.tipo}</small></div><button class="bt peq" onclick="fecharFolha()"><i class="bi bi-x-lg"></i></button></div>
+    <label class="campo">Nome curto (até 40)<input id="moNome" maxlength="40" value="${esc(m.nome)}"></label>
+    <label class="campo">Competência<select id="moComp">${D.competencias.map(c => `<option ${c === m.competencia ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select></label>
+    ${m.tipo === 'Atenção' ? `<label class="campo">Carta ligada no alerta<select id="moCarta"><option value="">Nenhuma</option>${(D.modelos || []).map(x => `<option value="${esc(x.id)}" ${x.id === m.carta ? 'selected' : ''}>${esc(x.nome)}</option>`).join('')}</select></label>` : ''}
+    <label class="campo">${m.tipo === 'Destaque' ? 'Frase de reconhecimento' : 'O que dizer na hora'}<textarea id="moFrase" rows="2" maxlength="200">${esc(m.frase)}</textarea></label>
+    <label class="campo" style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="moFav" style="width:auto" ${m.favorito ? 'checked' : ''}> Favorito (aparece primeiro)</label>
+    <button class="bt pri lg" onclick="salvarMotivo()"><i class="bi bi-check2"></i> Salvar</button>
+    ${id ? `<button class="bt perigo lg" style="margin-top:8px" onclick="excluirMotivo('${esc(id)}')"><i class="bi bi-trash"></i> Excluir da lista</button>` : ''}`);
+}
+async function salvarMotivo() {
+  const m = { ...F.motivo, nome: $('#moNome').value.trim(), competencia: $('#moComp').value, frase: $('#moFrase').value.trim(), carta: $('#moCarta') ? $('#moCarta').value : '', favorito: $('#moFav').checked };
+  if (!m.nome) return toast('Dê um nome curto.', 'erro');
+  if (await motivosAdmin('salvarMotivo', { motivo: m }, 'Motivo salvo.')) fecharFolha();
+}
+async function excluirMotivo(id) { if (!confirm('Excluir da lista? As estrelas antigas continuam no histórico.')) return; if (await motivosAdmin('excluirMotivo', { id }, 'Motivo excluído.')) fecharFolha(); }
+
+// ---------------------------------------------------------------- aviso, instalação, início
+function toast(html, tipo, botao, acao, ehHtml) {
+  const t = $('#toast'), b = $('#toastBt');
+  $('#toastTx').innerHTML = ehHtml ? html : esc(html);
+  t.className = 'toast on ' + (tipo || '');
+  b.classList.toggle('oculto', !botao); b.textContent = botao || ''; b.onclick = () => { t.classList.remove('on'); acao && acao(); };
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), botao ? 6000 : tipo === 'erro' ? 6000 : 3000);
+}
+let pedidoInstalar = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); pedidoInstalar = e; dicaInstalar(); });
+addEventListener('appinstalled', () => { pedidoInstalar = null; dicaInstalar(); });
+function dicaInstalar() {
+  const el = $('#dicaInstalar'); if (!el) return;
+  const instalado = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  const ios = /iPhone|iPad/.test(navigator.userAgent);
+  if (instalado || ler(LS.pref, {}).semDica) { el.innerHTML = ''; return; }
+  if (pedidoInstalar) el.innerHTML = `<button class="bt pri lg" style="margin-top:10px" onclick="pedidoInstalar.prompt();pedidoInstalar.userChoice.then(()=>{pedidoInstalar=null;dicaInstalar()})"><i class="bi bi-download"></i> Instalar o app</button>`;
+  else if (ios) el.innerHTML = `<div class="msg info" style="margin-top:10px"><i class="bi bi-box-arrow-up"></i><div>No iPhone: toque em <b>Compartilhar</b> › <b>Adicionar à Tela de Início</b>. Depois <b>abra pelo ícone e faça o pareamento lá</b> (o iPhone não passa os dados do Safari para o app instalado).</div></div>`;
+  else el.innerHTML = '';
+}
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || /^(127\.0\.0\.1|localhost)$/.test(location.hostname))) navigator.serviceWorker.register('sw.js').catch(() => {});
+if (!window.crypto || !crypto.subtle) document.body.innerHTML = '<div class="vazio">Este navegador não tem criptografia. Abra pelo Chrome ou Safari atualizado.</div>';
+else if (ler(LS.cfg, null)) telaPin('entrar'); else telaParear();
+</script>
+</body>
+</html>
